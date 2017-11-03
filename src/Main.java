@@ -1,6 +1,10 @@
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Scanner;
 
 import ga.STM;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class Main {
 	
@@ -23,18 +27,39 @@ public class Main {
 	static Chromosome maxFit[] = new Chromosome[MAX_GENERATIONS];
 
 	
-	public static void main(String[] a) {
-		generation = new Chromosome[MAX_GENERATIONS][MAX_CHROMS];
-		int[] expec = new int[COUNT];
-		int[][] args = new int[COUNT][3];
-		for(int i = 0; i < COUNT; i++) {
-			args[i][0] = i;
-			args[i][1] = i + 100;
-			args[i][2] = i + 2;
+	public static void main(String[] ar) {
+		Scanner scan = new Scanner(System.in);
+		String t = scan.nextLine();
+		scan.close();
+		HashMap<String, Integer> letters = new HashMap<String, Integer>();
+		for(int i = 0; i < t.length(); i++) {
+			if(Character.isLetter(t.charAt(i))) {
+				letters.put(t.charAt(i) + "", 1);
+			}
 		}
-		
+		String[] s1 = new String[letters.size()];
+		int i2 = 0;
+		for (String s : letters.keySet()) {
+			s1[i2] = s;
+			i2++;
+		}
+		Expression e = new ExpressionBuilder(t).variables(s1).build();
+		generation = new Chromosome[MAX_GENERATIONS][MAX_CHROMS];
+		double[] expec = new double[COUNT];
+		int[][] args = new int[COUNT][letters.size()];
 		for(int i = 0; i < COUNT; i++) {
-			expec[i] = args[i][0] * args[i][1] + 3 * args[i][2]; // FUNCTION GOES HERE
+			for(int i1 = 0; i < letters.size(); i++) {
+				args[i][i1] = i;
+			}
+		}
+		int i1;
+		for(int i = 0; i < COUNT; i++) {
+			i1 = 0;
+			for(String l : letters.keySet()) {
+				e.setVariable(l + "", args[i][i1]);
+				i1++;
+			}
+			expec[i] = e.evaluate();
 		}
 		int[] temp;
 		for(int j = 0; j < generation[0].length; j++) {
@@ -115,7 +140,7 @@ public class Main {
 		}
 	}
 
-	public static Chromosome testGeneration(Chromosome[] generation, int[][] args, int[] expected) {
+	public static Chromosome testGeneration(Chromosome[] generation, int[][] args, double[] expected) {
 		for(int i = 0; i < generation.length; i++) {
 			if((generation[i].fitness = multiInterpretSTM(generation[i], args, expected, false)) == 421) {
 				return generation[i];
@@ -154,7 +179,7 @@ public class Main {
 		return children;
 	}
 	
-	private static int calculateFitness(STM ga, int expected, int res) {
+	private static int calculateFitness(STM ga, double expected, int res) {
 		if(res != 0) {
 			return 0;
 		}
@@ -166,11 +191,11 @@ public class Main {
 		if(ga.SPEEK() == expected) {
 			return fit + TIER3;
 		}
-		return fit + (TIER3 / (Math.abs(ga.SPEEK() - expected) + 1));//(1 / ( 1 + Math.abs(expected - ga.SPEEK()))) * TIER3;
+		return fit + (int)(TIER3 / (Math.abs(ga.SPEEK() - expected) + 1));//(1 / ( 1 + Math.abs(expected - ga.SPEEK()))) * TIER3;
 		
 	}
 	
-	private static int multiInterpretSTM(Chromosome gene, int[][] args, int[] expected, boolean debug) {
+	private static int multiInterpretSTM(Chromosome gene, int[][] args, double[] expected, boolean debug) {
 		int fit = 0;
 		STM ga = null;
 		for(int i = 0; i < args.length; i++) {
