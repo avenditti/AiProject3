@@ -18,6 +18,7 @@ public class STM {
 	final static int ADD = 3;
 	final static int OVER = 4;
 	final static int NOP = 5;
+	final static int SUB = 6;
 
 	final static int MAX_INSTRUCTION = 6;
 
@@ -83,7 +84,7 @@ public class STM {
 	 *
 	 */
 	
-	public int interpretSTM(int[] program, int[] args, boolean debug) {
+	public int interpretSTM(int[] program, int[] args) {
 	  int pc = 0;
 	  int i, error = NONE;
 	  int a, b;
@@ -100,11 +101,6 @@ public class STM {
 	  /* Execute the program */
 	  while ((error == NONE) && (pc < program.length)) {
 		  
-		  if(debug) {
-			  printStack();
-			  System.out.println("---------------");
-			  System.out.println("Action " + program[pc]);
-		  }
 	    switch(program[pc++]) {
 	
 	      case DUP:{
@@ -140,12 +136,12 @@ public class STM {
 	        	break;
 			  }
 			  
-		/*	case SUB:{
+		  case SUB:{
 	        	if( ( error = ASSERT_STACK_ELEMENTS(2) )!=NONE ) break;
 	        	a = SPOP(); b = SPOP();
 	        	SPUSH(a - b);
 	        	break;
-			  }*/
+			  }
 	
 	      case OVER:{
 	        	if( (error = ASSERT_STACK_ELEMENTS(2))!=NONE ) break;
@@ -153,7 +149,7 @@ public class STM {
 	        	SPUSH(stack[stackPointer-2]);
 	        	break;
 			  }
-			case NOP:{
+		  case NOP:{
 	        	break;
 			  }
 	
