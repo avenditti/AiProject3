@@ -1,8 +1,18 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application{
+	
+	static AiController ai;
+	
 	public static void main(String[] args) {
-		AiController ai = new AiController();
+		ai = new AiController();
 		ai.initializeController("4x");
-		System.out.println(ai.solveEquation());
+		ai.solveEquation();
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		
 	}
 }

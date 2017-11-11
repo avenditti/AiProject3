@@ -83,6 +83,14 @@ public class AiController {
 	}
 	
 	/**
+	 * Returns expected values from the given expression
+	 * @return expected values
+	 */
+	public double[] getExpected() {
+		return expec;
+	}
+	
+	/**
 	 * Evolves the network and returns a solution chromosome
 	 * @return Solution chromosome 
 	 */
@@ -165,6 +173,9 @@ public class AiController {
 	
 	/**
 	 * Runs through the given contenders and pseudo randomly selects parents
+	 * @param contenders
+	 * @param max Max fitness of current generation
+	 * @return Child chromosome
 	 */
 	private Chromosome selectParent(Chromosome[] contenders, int max) {
 		for(int i = (int)(Math.random() * contenders.length); true; i++) {
