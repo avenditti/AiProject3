@@ -1,24 +1,25 @@
+import java.util.Arrays;
 
-public class Chromosome implements Comparable<Chromosome>{
+public class Chromosome implements Comparable<Chromosome> {
 
-	int fitness;
+	double fitness;
 	int[] program;
-	
+
 	public Chromosome(int[] i) {
-		this.program = i;
+		this.program = Arrays.copyOf(i, i.length);
 	}
 
 	@Override
 	public int compareTo(Chromosome o) {
-		return this.fitness - o.fitness;
+		return (int)(this.fitness - o.fitness);
 	}
-	
+
 	@Override
 	public String toString() {
 		String temp = "";
-		for(int i : program) {
+		for (int i : program) {
 			temp += i + " ";
 		}
-		return temp + fitness;
+		return temp;
 	}
 }
